@@ -1,0 +1,18 @@
+services:
+  mini-codex:
+    build: .
+    volumes:
+      - ./:/work
+      - /tmp:/tmp
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - CODEX_MINI_MODEL=${CODEX_MINI_MODEL:-openai/gpt-5.3-codex}
+      - CODEX_MINI_WORKSPACE=/work/shop
+      - CODEX_MINI_LOG=/tmp/rollout.jsonl
+    network_mode: bridge
+    command: pytest -v
+  verify-live:
+    build: .
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python experiments/verify_live.py
