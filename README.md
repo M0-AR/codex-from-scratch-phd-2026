@@ -13,7 +13,15 @@
 
 **Production reference:** [`openai/codex`](https://github.com/openai/codex) — 128,177 stars, Rust, `codex-rs/core/src/state/turn.rs`, `seek_sequence`, Seatbelt/Landlock sandboxing, `AGENTS.md`, `/responses/compact`.
 
-🌐 **Read this repo as a website:** open [`preview.html`](preview.html) — the most informative single page in this project, with visuals, tables, and an 8-question interactive quiz. Publish it free via **Settings → Pages → Deploy from a branch → `main` / `(root)`** (or `/docs`), then share `https://<user>.github.io/<repo>/preview.html`. A ready-made Actions workflow lives at [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
+🌐 **Read this repo as a website:** open [`preview.html`](preview.html) locally, or click the live links below (all three serve the same interactive page — if one 404s, your Pages source is set to the other folder; see [GitHub Pages](#-github-pages)):
+
+| Entry | Live link | When it works |
+|-------|-----------|---------------|
+| `/` | [m0-ar.github.io/codex-from-scratch-phd-2026/](https://m0-ar.github.io/codex-from-scratch-phd-2026/) | source `/` (root `index.html` → redirects to `preview.html`) **or** source `/docs` (`docs/index.html`) |
+| `/preview.html` | [m0-ar.github.io/codex-from-scratch-phd-2026/preview.html](https://m0-ar.github.io/codex-from-scratch-phd-2026/preview.html) | source `/` (root `preview.html`) |
+| `/docs/preview.html` | [m0-ar.github.io/codex-from-scratch-phd-2026/docs/preview.html](https://m0-ar.github.io/codex-from-scratch-phd-2026/docs/preview.html) | source `/` (root serving `docs/` path) |
+
+Recommended setting: **Settings → Pages → Deploy from a branch → `main` → `/docs`**, then all three resolve (`/` via `docs/index.html`, `/preview.html` via mirror, `/docs/preview.html` direct). A ready-made Actions workflow lives at [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
 
 ---
 
@@ -242,16 +250,35 @@ Before citing any score ask: which variant? who ran it? which harness? what are 
 
 ## 🧪 Interactive quiz
 
-Open [`preview.html`](preview.html) (or the Pages URL) → **Interactive quiz — from scratch to pro**: 8 questions with step-by-step explanations, instant scoring, restart. Score ≥7/8 and you can whiteboard the loop, the patch format, the safety layers, and the memory trade-off from memory.
+Open [`preview.html`](preview.html) locally, or live: [/](https://m0-ar.github.io/codex-from-scratch-phd-2026/) · [/preview.html](https://m0-ar.github.io/codex-from-scratch-phd-2026/preview.html) · [/docs/preview.html](https://m0-ar.github.io/codex-from-scratch-phd-2026/docs/preview.html) → **Interactive quiz — from scratch to pro**: 8 questions with step-by-step explanations, instant scoring, restart. Score ≥7/8 and you can whiteboard the loop, the patch format, the safety layers, and the memory trade-off from memory.
 
 ---
 
 ## 🌐 GitHub Pages
 
-1. Commit `preview.html`, `docs/index.html`, `.nojekyll`, `.github/workflows/pages.yml`.
-2. Repo → **Settings → Pages → Deploy from a branch** → Branch `main`, folder `/ (root)` (or `/docs`) → Save.
-3. Open `https://<user>.github.io/<repo>/preview.html`, complete the quiz, verify mobile layout.
-4. Screenshot it to `assets/preview.png` and link it at the top of this README.
+> Green "Deployed" only proves *something* built — it never proves *your path* exists under the configured source. Entry file (`index.html`) must sit at the top of the chosen source (`/` or `/docs`); other URLs mirror the repo path under that source.
+
+1. Files committed: root `index.html` (redirects to `preview.html`) + root `preview.html` + `docs/index.html` + `docs/preview.html` + `.nojekyll` in both root and `docs/` + [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
+2. Repo → **Settings → Pages → Deploy from a branch** → Branch `main`, folder **`/docs`** (recommended) → Save. Root mirrors keep `/preview.html` working if you pick `/` instead.
+3. Wait 1–2 min for the "pages build and deployment" Action, then probe (expect 200/200/200):
+
+```bash
+BASE="https://m0-ar.github.io/codex-from-scratch-phd-2026"
+for p in "" "preview.html" "docs/preview.html"; do
+  printf "%s -> " "/$p"
+  curl -s -o /dev/null -w "%{http_code}\n" "$BASE/$p"
+done
+```
+
+| `/` | `/preview.html` | `/docs/preview.html` | Meaning |
+|---|---|---|---|
+| 200 | 200 | 404 | source = `/docs` ✅, all good |
+| 200 | 404 | 200 | source = `/` (root); page lives under `/docs` |
+| 404 | 404 | 404 | Pages off / still building / wrong branch |
+| 200 | 404 | 404 | source = `/`, but entry/file missing |
+
+4. Click through in your browser: [/](https://m0-ar.github.io/codex-from-scratch-phd-2026/) · [/preview.html](https://m0-ar.github.io/codex-from-scratch-phd-2026/preview.html) · [/docs/preview.html](https://m0-ar.github.io/codex-from-scratch-phd-2026/docs/preview.html) — complete the quiz on each, verify mobile width.
+5. Screenshot to `assets/preview.png` and keep it linked at the top of this README.
 
 ---
 
